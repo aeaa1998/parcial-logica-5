@@ -1,0 +1,9 @@
+S | C | R | M | N 
+q1  0   0   R   qA
+q1  1   1   R   q2
+q2  0   0   L   q3
+q2  1   1   R   q4
+q3  1   1   R   q2
+q4  0   0   R   qA
+q4  1   1   R   q4
+q4  _   _   R   qR
