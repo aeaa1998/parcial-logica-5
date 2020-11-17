@@ -37,7 +37,7 @@ export  default class Machine {
             if (transition) {
                 let cfHolder = [... this.currentConfig]
                 let pastHead = this.head
-                let [ , write, direction, successorState] = transition
+                let [_ , write, direction, successorState] = transition
                 this.currentConfig[this.head] = write
                 if (direction === this.right) {
                     this.head++
@@ -51,9 +51,7 @@ export  default class Machine {
                         this.head ++
                     }
                 }
-
                 this.log(transition,cfHolder, pastHead, successorState)
-
                 this.currentState = successorState
                 this.counter++
             } else {
