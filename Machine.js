@@ -3,7 +3,7 @@ const require = createRequire(import.meta.url);
 
 export  default class Machine {
     constructor() {
-        let main = require('./init.json');
+        let main = require('./initRechazo.json');
         this.right = main.right
         this.left = main.left
         this.spaceSymbol = main.space

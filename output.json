@@ -1,11 +1,29 @@
 {
   "0": {
-    "successorConfig": "_qA_0110_",
-    "currentConfig": "_q10110_",
+    "successorConfig": "_1q21_",
+    "currentConfig": "_q111_",
     "currentState": "q1",
-    "successorState": "qA",
-    "readValue": "0",
-    "writeValue": "0",
-    "direction": "Izquierda"
+    "successorState": "q2",
+    "readValue": "1",
+    "writeValue": "1",
+    "direction": "Derecha"
+  },
+  "1": {
+    "successorConfig": "_11q4__",
+    "currentConfig": "_1q21_",
+    "currentState": "q2",
+    "successorState": "q4",
+    "readValue": "1",
+    "writeValue": "1",
+    "direction": "Derecha"
+  },
+  "2": {
+    "successorConfig": "_11_qR__",
+    "currentConfig": "_11q4__",
+    "currentState": "q4",
+    "successorState": "qR",
+    "readValue": "_",
+    "writeValue": "_",
+    "direction": "Derecha"
   }
 }
