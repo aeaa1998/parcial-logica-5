@@ -16,5 +16,5 @@
   "initialState": "q0",
   "acceptStates": ["q9"],
   "space": "_",
-  "initConfig": "q00"
+  "initConfig": "q10"
 }

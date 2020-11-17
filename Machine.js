@@ -14,7 +14,14 @@ export  default class Machine {
         this.head = 1
         this.counter = 0
         this.fs = require('fs');
-        this.currentState = Object.keys(this.transitions)[0]
+        this.invalid = false
+        this.strict = true
+        if (this.strict){
+            this.currentState = undefined
+        }else {
+            this.currentState = Object.keys(this.transitions)[0]
+        }
+
         for(let k in this.transitions) {
             if(main.initConfig.search(k) !== -1){
                 this.head = main.initConfig.search(k) + 1
@@ -23,16 +30,44 @@ export  default class Machine {
                 break
             }
         }
+
+        if (this.strict && this.currentState == undefined){
+            this.invalid = true
+            console.log("No se encontro estado inicial en la máquina de toruing")
+        }
+        for(let k in this.transitions) {
+            if(main.initConfig == k){
+                this.invalid = true
+                console.log("Solo se coloco el estado en la configuración inicial")
+                break
+            }
+        }
+
+        for(let k in this.transitions) {
+            if (!Object.keys(this.transitions).includes(k)){
+                console.log("El estado ", k, " no es valido")
+                this.invalid = true
+            }
+        }
+
+
         this.logs = {}
         this.currentConfig = [this.spaceSymbol, ...this.input.split(""), this.spaceSymbol];
+
 
     }
 
     read(){
-        console.log("Configuracion inicial", this.parseConfig())
+        if(this.invalid){
+            console.log("La maquina de turing no es válida.")
+            return
+        }
+        console.log("Configuracion inicial", this.parseConfig(this.currentConfig, {head: this.head, state: this.currentState}))
         while (true) {
             let transition = this.transitions[this.currentState]
-                .find(([read]) => read === this.currentConfig[this.head])
+                .find(([read]) => {
+                    return read === this.currentConfig[this.head]
+                })
 
             if (transition) {
                 let cfHolder = [... this.currentConfig]
@@ -51,7 +86,7 @@ export  default class Machine {
                         this.head ++
                     }
                 }
-                this.log(transition,cfHolder, pastHead, successorState)
+                this.log(transition,cfHolder, pastHead, successorState, direction)
                 this.currentState = successorState
                 this.counter++
             } else {
@@ -78,11 +113,10 @@ export  default class Machine {
         }
     }
 
-    log(transition,currentConfig,pastHead, successorState) {
+    log(transition,currentConfig,pastHead, successorState, direction) {
 
         const ts = this.parseTransition(transition)
-        const configParsed = this.parseConfig()
-        const pointer = this.parsePointer(ts.length)
+        const configParsed = this.parseConfig(this.currentConfig, {head: this.head, state: successorState})
         this.logs[this.counter] = {
             successorConfig: this.parseConfig(this.currentConfig, {head: this.head, state: successorState}),
             currentConfig: this.parseConfig(currentConfig, {head: pastHead, state: this.currentState}),
@@ -90,8 +124,8 @@ export  default class Machine {
             successorState: successorState,
             readValue: transition[0],
             writeValue: transition[1],
+            direction: direction == this.left ? "Izquierda" : "Derecha"
         }
-        console.log("    " + pointer)
         console.log("    " + `${ts} \t ${configParsed}`)
     }
 
@@ -109,13 +143,5 @@ export  default class Machine {
         }
         return cf.join("")
     }
-
-    parsePointer(transitionFunctionLength){
-        return `${Array(transitionFunctionLength).fill(" ")
-            .join("")} \t ${Array(this.head)
-            .fill(" ")
-            .join("")}↓`
-    }
-
 
 }
